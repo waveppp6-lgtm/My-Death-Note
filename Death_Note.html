@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Death Note</title>
+
+<!-- Death Note 폰트 -->
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: "궁서", serif;
+    background: radial-gradient(circle, #111 0%, #000 100%);
+    color: #ff1a1a;
+    text-align: center;
+}
+
+/* 룰 화면 */
+#rulesOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: black;
+    color: red;
+    font-family: 'Creepster', "궁서", serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 0 0 10px red, 0 0 20px red;
+    z-index: 9999;
+}
+#rulesOverlay h1 { font-size: 8vw; margin-bottom: 20px; }
+
+/* 룰 상단 바 */
+#ruleTopBar {
+    position: absolute;
+    top: 10px; right: 20px;
+    display: flex; gap: 10px;
+    align-items: center;
+}
+#ruleTopBar select, #ruleTopBar span {
+    background: black;
+    color: red;
+    border: 1px solid red;
+    padding: 4px 8px;
+    font-family: 'Creepster', "궁서", serif;
+    font-size: 14px;
+}
+
+/* 룰 내용 스크롤 */
+#rulesContent {
+    height: 5em;
+    overflow-y: auto;
+    text-align: left;
+    margin: 10px 20px;
+    line-height: 1.5em;
+    scrollbar-width: thin;
+    scrollbar-color: black black;
+}
+#rulesContent::-webkit-scrollbar {
+    width: 8px;
+}
+#rulesContent::-webkit-scrollbar-track {
+    background: black;
+}
+#rulesContent::-webkit-scrollbar-thumb {
+    background: black;
+    border-radius: 4px;
+}
+#rulesContent p { margin: 0 0 5px 0; }
+
+#rulesOverlay button {
+    font-size: 4vw;
+    padding: 10px 20px;
+    border: 2px solid red;
+    background: black;
+    color: red;
+    cursor: pointer;
+}
+#rulesOverlay button:active {
+    background: red;
+    color: black;
+}
+
+/* 모바일 대응 */
+@media screen and (max-width: 600px) {
+    #rulesContent { height: 8em; font-size: 4vw; line-height: 1.6em; }
+    #rulesOverlay button { font-size: 5vw; }
+    #ruleTopBar select, #ruleTopBar span { font-size: 12px; padding: 3px 6px; }
+}
+
+/* Death Note 화면 */
+#deathNote { display: none; }
+
+h1, h2 {
+    font-family: 'Creepster', "궁서", serif;
+    text-shadow: 0 0 10px red, 0 0 20px red;
+}
+
+.container { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+input, button { padding: 8px 10px; background: black; border: 1px solid red; color: red; font-size: 16px; text-align: center; }
+input { width: auto; min-width: 120px; }
+label.checkbox-label { display: flex; align-items: center; justify-content: flex-start; background: black; color: red; border: 1px solid red; padding: 1 8px; font-size: 16px; height: 38px; min-width: 90px; box-sizing: border-box; }
+label.checkbox-label input[type="checkbox"] { width: 30px; height: 30px; margin-left: 6px; }
+
+ol { list-style: none; padding: 0; width: 95%; max-width: 700px; margin: 10px auto; }
+li { margin: 10px auto; padding: 10px; border: 2px solid red; font-size: 16px; display: flex; flex-direction: column; gap: 5px; text-shadow: 0 0 10px red, 0 0 20px red; color: #ff1a1a; background: black; }
+li .input-box { border: 1px solid red; padding: 5px 8px; background: #111; display: flex; gap: 10px; flex-wrap: wrap; }
+
+.death-message { font-size: 2vw; padding: 8px 12px; border: 1.5px solid red; background: black; color: red; text-shadow: 0 0 5px red, 0 0 10px red; position: relative; margin-top: 10px; }
+
+/* RULES 버튼 스타일 (메인 화면 오른쪽 위) */
+#viewRulesBtn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: black;
+    color: red;
+    border: 1px solid red;
+    padding: 5px 12px;
+    font-family: 'Creepster', "궁서", serif;
+    cursor: pointer;
+    z-index: 500;
+}
+#viewRulesBtn:active { background: red; color: black; }
+</style>
+</head>
+<body>
+
+<!-- 룰 화면 -->
+<div id="rulesOverlay">
+    <div id="ruleTopBar">
+        <select id="langSelect">
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+            <option value="jp">日本語</option>
+            <option value="ru">Русский</option>
+            <option value="cn">中文</option>
+        </select>
+        <select id="modeSelect">
+            <option value="pc">PC 모드</option>
+            <option value="mobile">모바일 모드</option>
+        </select>
+    </div>
+    <h1>RULES</h1>
+    <div id="rulesContent"></div>
+    <button id="agreeBtn">동의</button>
+</div>
+
+<!-- Death Note 화면 -->
+<div id="deathNote">
+<h1>Death Note</h1>
+<div class="container">
+    <input type="text" id="name" placeholder="">
+    <input type="text" id="year" placeholder="">
+    <input type="text" id="time" placeholder="">
+    <input type="text" id="reason" placeholder="">
+    <label class="checkbox-label">
+        <span id="effectText"></span>
+        <input type="checkbox" id="effectOption">
+    </label>
+    <button id="recordBtn"></button>
+</div>
+<br>
+<h2>List</h2>
+<ol id="list"></ol>
+<button id="viewRulesBtn">RULES</button>
+</div>
+
+<script>
+// 언어별 룰
+const rulesText = {
+    ko: [
+        "1. 모든 이름과 시간/년도을 정확히 입력해야 합니다.",
+        "2. 체크박스를 선택하면 사망 알림 효과가 발생합니다.",
+        "3. 입력하지 않은 항목이 있으면 경고가 나타납니다.",
+        "4. 리스트에 추가된 사람은 몇초 후 죽은자의 메시지가 표시됩니다.",
+        "5. 이 모든일을 벌이고 싶은 시면 동의 버튼을 누르시오."
+    ],
+    en: [
+        "1. You must enter the name and time accurately.",
+        "2. Selecting the checkbox will trigger a death notification effect.",
+        "3. If any field is empty, an alert appears.",
+        "4. Items added to the list disappear after 3 seconds and a message appears.",
+        "5. This page always shows the rules overlay even after refreshing."
+    ],
+    jp: [
+        "1. 名前と時間を正確に入力する必要があります。",
+        "2. チェックボックスを選択すると死亡通知効果が発生します。",
+        "3. 入力されていない項目がある場合、警告が表示されます。",
+        "4. リストに追加された項目は3秒後に消え、メッセージが表示されます。",
+        "5. このページはリロードしても常にルール画面が表示されます。"
+    ],
+    ru: [
+        "1. Вы должны точно вводить имя и время.",
+        "2. Выбор флажка вызовет эффект уведомления о смерти.",
+        "3. Если какое-либо поле пустое, появляется предупреждение.",
+        "4. Добавленные в список элементы исчезают через 3 секунды и появляется сообщение.",
+        "5. Эта страница всегда показывает правила даже после обновления."
+    ],
+    cn: [
+        "1. 必须准确输入姓名和时间。",
+        "2. 选择复选框会触发死亡通知效果。",
+        "3. 如果有未填写的字段，将显示警告。",
+        "4. 添加到列表的项目3秒后消失并显示消息。",
+        "5. 即使刷新页面，也会始终显示规则。"
+    ]
+};
+
+const translations = { 
+    ko: { alertEmpty: "모든 항목을 입력해주세요!", addButton: "추가", deathMessage: (n,t,y,r)=>`${n}는 사망했다… (${y}, ${t}, ${r})`, placeholder: {name:"이름",year:"몇년 월일",time:"시간",reason:"사유"}, effectOption:"사망 알림 효과", inputLabels:["이름:","몇년 월일:","시간:","사유:" ] },
+    en: { alertEmpty: "Please fill out all fields!", addButton: "Add", deathMessage: (n,t,y,r)=>`${n} has died… (${y}, ${t}, ${r})`, placeholder: {name:"Name",year:"Date",time:"Time",reason:"Reason"}, effectOption:"Death effect", inputLabels:["Name:","Date:","Time:","Reason:"] },
+    jp: { alertEmpty: "すべての項目を入力してください！", addButton: "追加", deathMessage: (n,t,y,r)=>`${n}は死亡した… (${y}, ${t}, ${r})`, placeholder: {name:"名前",year:"年月日",time:"時間",reason:"理由"}, effectOption:"死亡通知効果", inputLabels:["名前:","年月日:","時間:","理由:"] },
+    ru: { alertEmpty: "Пожалуйста, заполните все поля!", addButton: "Добавить", deathMessage: (n,t,y,r)=>`${n} умер… (${y}, ${t}, ${r})`, placeholder: {name:"Имя",year:"Дата",time:"Время",reason:"Причина"}, effectOption:"Эффект смерти", inputLabels:["Имя:","Дата:","Время:","Причина:"] },
+    cn: { alertEmpty: "请填写所有字段！", addButton: "添加", deathMessage: (n,t,y,r)=>`${n}死亡了… (${y}, ${t}, ${r})`, placeholder: {name:"姓名",year:"日期",time:"时间",reason:"原因"}, effectOption:"死亡提示效果", inputLabels:["姓名:","日期:","时间:","原因:"] }
+};
+
+
+
+let currentLang = localStorage.getItem("lang") || "ko";
+let savedMode = localStorage.getItem("mode") || (window.innerWidth <= 600 ? "mobile" : "pc");
+
+const effectText = document.getElementById("effectText");
+const recordBtn = document.getElementById("recordBtn");
+const list = document.getElementById("list");
+const deathNote = document.getElementById("deathNote");
+const rulesOverlay = document.getElementById("rulesOverlay");
+const langSelect = document.getElementById("langSelect");
+const modeSelect = document.getElementById("modeSelect");
+const viewRulesBtn = document.getElementById("viewRulesBtn");
+const rulesContent = document.getElementById("rulesContent");
+
+function updateLanguageUI(){
+    const t = translations[currentLang];
+    document.getElementById("name").placeholder = t.placeholder.name;
+    document.getElementById("year").placeholder = t.placeholder.year;
+    document.getElementById("time").placeholder = t.placeholder.time;
+    document.getElementById("reason").placeholder = t.placeholder.reason;
+    effectText.textContent = t.effectOption;
+    recordBtn.textContent = t.addButton;
+    // 룰 텍스트 변경
+    rulesContent.innerHTML = rulesText[currentLang].map(p=>`<p>${p}</p>`).join("");
+}
+updateLanguageUI();
+
+langSelect.value = currentLang;
+langSelect.addEventListener("change", e=>{
+    currentLang = e.target.value;
+    localStorage.setItem("lang", currentLang);
+    updateLanguageUI();
+});
+
+modeSelect.value = savedMode;
+modeSelect.addEventListener("change", e=>{
+    savedMode = e.target.value;
+    localStorage.setItem("mode", savedMode);
+    if(savedMode === "mobile") deathNote.classList.add("mobile");
+    else deathNote.classList.remove("mobile");
+});
+
+// 룰 동의
+document.getElementById("agreeBtn").addEventListener("click", ()=>{
+    rulesOverlay.style.display = "none";
+    deathNote.style.display = "block";
+});
+
+// 메인에서 룰 다시보기
+viewRulesBtn.addEventListener("click", ()=>{
+    rulesOverlay.style.display = "flex";
+});
+
+// 기록 추가
+recordBtn.addEventListener("click", ()=>{
+    const name=document.getElementById("name").value.trim();
+    const year=document.getElementById("year").value.trim();
+    const time=document.getElementById("time").value.trim();
+    const reason=document.getElementById("reason").value.trim();
+    const effectOption=document.getElementById("effectOption").checked;
+    const t = translations[currentLang];
+    if(!name || !year || !time || !reason){ alert(t.alertEmpty); return; }
+
+    const li = document.createElement("li");
+    const inputBox = document.createElement("div");
+    inputBox.className = "input-box";
+    t.inputLabels.forEach((label,i)=>{
+        const span = document.createElement("span");
+        span.textContent = label + " " + [name,year,time,reason][i];
+        inputBox.appendChild(span);
+    });
+    li.appendChild(inputBox);
+    list.appendChild(li);
+
+    setTimeout(()=>{
+        if(li.parentNode) li.remove();
+        if(effectOption) showMessage(t.deathMessage(name,time,year,reason));
+    },3000);
+
+    document.getElementById("name").value="";
+    document.getElementById("year").value="";
+    document.getElementById("time").value="";
+    document.getElementById("reason").value="";
+});
+
+// 사망 메시지
+function showMessage(msg){
+    const message = document.createElement("div");
+    message.textContent = msg;
+    message.className = "death-message"; 
+    list.parentNode.insertBefore(message, list.nextSibling);
+    setTimeout(()=>message.remove(),3000);
+}
+</script>
+</body>
+</html>
