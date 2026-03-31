@@ -20,7 +20,8 @@ body {
 }
 
 #mainWrapper { width: 100%; max-width: 1200px; transition: all 0.5s ease; padding: 20px; box-sizing: border-box; }
-.mobile-view { max-width: 380px !important; border: 2px solid #333; background: rgba(0,0,0,0.4); }
+/* 모바일 뷰 스타일 (기기 선택 시 적용) */
+.mobile-view { max-width: 380px !important; border: 2px solid #333; background: rgba(0,0,0,0.4); margin: 0 auto; }
 
 /* 룰 오버레이 및 위치 */
 #rulesOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: flex; justify-content: center; align-items: center; }
@@ -34,11 +35,12 @@ body {
     width: 90%; 
     max-width: 600px; 
     transition: opacity 0.5s; 
-    margin-top: 60px; 
 }
 
-#rulesMainTitle { font-family: 'Creepster'; font-size: 3.5rem; margin: 0 0 20px 0; text-shadow: 0 0 10px red; }
-.select-group { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 8px; }
+#rulesMainTitle { font-family: 'Creepster'; font-size: 3.5rem; margin: 0 0 15px 0; text-shadow: 0 0 10px red; }
+
+/* 룰 박스 내부 선택창 그룹 */
+.select-group { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 10px; }
 select, .btn-style { background: black; color: red; border: 1px solid red; padding: 8px 12px; font-family: inherit; cursor: pointer; font-size: 18px; }
 
 #rulesContent { 
@@ -48,32 +50,50 @@ select, .btn-style { background: black; color: red; border: 1px solid red; paddi
     border: 2px solid #ff1a1a; 
     padding: 25px; 
     background: rgba(0,0,0,0.9); 
-    font-size: 24px; 
+    font-size: 22px; 
     line-height: 1.4;
     word-break: keep-all;
 }
 
-/* 타이틀 섹션: 언더라인 제거 및 여백 조정 */
-.title-section { width: 100%; margin-bottom: 30px; position: relative; }
-.title-section h1 { font-size: 3.5rem; margin: 0; font-family: 'Creepster'; letter-spacing: 3px; color: #ff1a1a; text-shadow: 0 0 8px #ff0000; }
-#viewRulesBtn { position: absolute; right: 0; top: 15px; padding: 5px 20px; font-size: 18px; }
+/* --- 메인 화면 레이아웃 (가려짐 방지 핵심) --- */
+.title-section { 
+    width: 100%; 
+    margin-bottom: 30px; 
+    display: flex;
+    flex-direction: column; /* 세로로 쌓기 */
+    align-items: center;
+    position: relative; /* 자식 요소 배치를 위한 기준 */
+}
+
+.title-section h1 { 
+    font-size: 3.5rem; 
+    margin: 0; 
+    font-family: 'Creepster'; 
+    letter-spacing: 3px; 
+    color: #ff1a1a; 
+    text-shadow: 0 0 8px #ff0000; 
+}
+
+/* 메인 화면의 RULES 버튼: 타이틀 아래 오른쪽에 배치 */
+#viewRulesBtn { 
+    align-self: flex-end; /* 오른쪽 정렬 */
+    margin-top: 10px;
+    margin-right: 5%;
+    padding: 5px 20px;
+}
 
 .container { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 10px; }
 input, #recordBtn { width: 100%; max-width: 350px; padding: 12px; background: black; border: 1px solid red; color: red; font-size: 24px; font-family: inherit; outline: none; box-sizing: border-box; }
 #recordBtn { font-family: 'Creepster'; cursor: pointer; font-size: 20px; transition: 0.3s; margin-top: 5px; }
 
-#listHeader { cursor: pointer; margin-top: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+#listHeader { cursor: pointer; margin-top: 30px; display: flex; justify-content: center; align-items: center; gap: 10px; }
 #listHeader h2 { font-family: 'Creepster'; font-size: 2rem; margin: 0; color: #ff1a1a; text-shadow: 0 0 6px #ff0000; }
 #listContainer { max-height: 500px; overflow-y: auto; width: 100%; max-width: 650px; margin: 10px auto; border: 2px solid #ff1a1a; background: rgba(10, 0, 0, 0.8); text-align: left; transition: max-height 0.4s ease; }
 .collapsed #listContainer { max-height: 0; border-color: transparent; }
 
 li { padding: 15px 20px; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center; }
 .li-content { font-size: 24px; line-height: 1.3; color: #ff1a1a; flex: 1; }
-.li-btns { display: flex; flex-direction: column; gap: 8px; margin-left: 10px; }
 .small-btn { font-family: inherit; background: black; border: 1px solid red; color: red; cursor: pointer; font-size: 18px; padding: 4px 12px; }
-.small-btn:hover { background: red; color: black; }
-
-.edit-input { width: 95%; background: #111; border: 1px solid red; color: red; font-family: inherit; font-size: 20px; margin-bottom: 5px; padding: 5px; }
 
 #msgContainer { margin: 10px auto; min-height: 80px; }
 .death-message { font-size: 26px; font-weight: bold; color: #ff0000; text-shadow: 0 0 8px rgba(255,0,0,0.8); line-height: 1.3; }
@@ -96,7 +116,10 @@ li { padding: 15px 20px; border-bottom: 1px solid #444; display: flex; justify-c
                 <option value="ru">Русский</option>
                 <option value="cn">中文</option>
             </select>
-            <select id="deviceSelect"><option value="pc">PC</option><option value="mobile">MOBILE</option></select>
+            <select id="deviceSelect">
+                <option value="pc">PC VIEW</option>
+                <option value="mobile">MOBILE VIEW</option>
+            </select>
         </div>
         <div id="rulesContent"><div id="rulesList"></div></div>
         <button id="agreeBtn" class="btn-style" style="margin-top: 20px; padding: 10px 80px;">AGREE</button>
@@ -108,6 +131,7 @@ li { padding: 15px 20px; border-bottom: 1px solid #444; display: flex; justify-c
         <h1>Death Note</h1>
         <button id="viewRulesBtn" class="btn-style">RULES</button>
     </div>
+    
     <div class="container">
         <input type="text" id="name"><input type="text" id="year"><input type="text" id="time"><input type="text" id="reason">
         <button id="recordBtn">RECORD</button>
@@ -121,16 +145,15 @@ li { padding: 15px 20px; border-bottom: 1px solid #444; display: flex; justify-c
 
 <script>
 const translations = {
-    ko: { agree: "동의", addButton: "기록하기", save: "저장", placeholders: ["이름:", "날짜:", "시간:", "사유:"], deathMsg: (n,y,t,r) => `${n}은(는) 사망했다.<br>${y} (${t})<br>사유: ${r}`, deleteMsg: (n) => `${n}의 이름이 명단에서 사라졌다.`, listLabels: ["이름:", "일시:", "사유:"], edit: "수정", del: "삭제", rules: ["1. 이 노트에 이름이 적힌 인간은 죽는다.", "2. 얼굴을 모르면 효과가 없다.", "3. 40초 내에 사인을 적으면 그대로 죽는다.", "4. 사인을 적지 않으면 심장마비로 죽는다.", "5. 모든 규칙을 이해했다면 동의를 누르십시오."] },
-    en: { agree: "AGREE", addButton: "RECORD", save: "SAVE", placeholders: ["Name:", "Date:", "Time:", "Reason:"], deathMsg: (n,y,t,r) => `${n} has died.<br>${y} (${t})<br>Reason: ${r}`, deleteMsg: (n) => `${n}'s name has vanished.`, listLabels: ["Name:", "Date:", "Reason:"], edit: "Edit", del: "Delete", rules: ["1. The human whose name is written in this note shall die.", "2. It will not take effect unless the writer has the person's face in mind.", "3. If the cause of death is written within 40 seconds, it will happen.", "4. If not specified, the person will die of a heart attack.", "5. If you understand, click Agree."] },
-    jp: { agree: "同意", addButton: "記録", save: "保存", placeholders: ["名前:", "日付:", "時間:", "理由:"], deathMsg: (n,y,t,r) => `${n}は死亡した.<br>${y} (${t})<br>理由: ${r}`, deleteMsg: (n) => `${n}の名は消え去った.`, listLabels: ["名前:", "日時:", "理由:"], edit: "修正", del: "削除", rules: ["1. このノートに名前を書かれた人間は死ぬ。", "2. 顔がわからなければ効果はない。", "3. 40秒以内に死因を書けばその通りになる。", "4. 死因を書かなければ心臓麻痺で死ぬ。", "5. 全ての規則を理解したら同意を押せ。"] },
-    ru: { agree: "Да", addButton: "Запись", save: "ОК", placeholders: ["Имя:", "Дата:", "Время:", "Причина:"], deathMsg: (n,y,t,r) => `${n} мертв.<br>${y} (${t})<br>Причина: ${r}`, deleteMsg: (n) => `Имя ${n} стер토.`, listLabels: ["Имя:", "Дата:", "Причина:"], edit: "Изм", del: "Удл", rules: ["1. Человек, чье имя здесь, умрет.", "2. Нужно знать лицо жертвы.", "3. Причина смерти за 40 сек.", "4. Иначе - сердечный приступ.", "5. Нажмите Да, если поняли."] },
-    cn: { agree: "同意", addButton: "记录", save: "保存", placeholders: ["姓名:", "日期:", "时间:", "原因:"], deathMsg: (n,y,t,r) => `${n}死亡。<br>${y} (${t})<br>原因: ${r}`, deleteMsg: (n) => `${n}的名字消失了。`, listLabels: ["姓名:", "日期:", "原因:"], edit: "修改", del: "删除", rules: ["1. 名字写在上面的人就会死。", "2. 必须知道对方的长상。", "3. 40秒内可以写下死因。", "4. 否则将死于心脏麻痹。", "5. 理解规则后请点击同意。"] }
+    ko: { agree: "동의", addButton: "기록하기", placeholders: ["이름:", "날짜:", "시간:", "사유:"], listLabels: ["이름:", "일시:", "사유:"], del: "삭제", rules: ["1. 이 노트에 이름이 적힌 인간은 죽는다.", "2. 얼굴을 모르면 효과가 없다.", "3. 40초 내에 사인을 적으면 그대로 죽는다.", "4. 사인을 적지 않으면 심장마비로 죽는다.", "5. 모든 규칙을 이해했다면 동의를 누르십시오."] },
+    en: { agree: "AGREE", addButton: "RECORD", placeholders: ["Name:", "Date:", "Time:", "Reason:"], listLabels: ["Name:", "Date:", "Reason:"], del: "Delete", rules: ["1. The human whose name is written in this note shall die.", "2. It will not take effect unless the writer has the person's face in mind.", "3. If the cause of death is written within 40 seconds, it will happen.", "4. If not specified, the person will die of a heart attack.", "5. If you understand, click Agree."] },
+    jp: { agree: "同意", addButton: "記録", placeholders: ["名前:", "日付:", "時間:", "理由:"], listLabels: ["名前:", "日時:", "理由:"], del: "削除", rules: ["1. このノートに名前を書かれた人間は死ぬ。", "2. 顔이わからなければ効果はない。", "3. 40秒以内に死因を書けばその通りになる。", "4. 死因を書かなければ心臓麻痺で死ぬ。", "5. 全ての規則을理解したら同意を押せ。"] },
+    ru: { agree: "Да", addButton: "Запись", placeholders: ["Имя:", "Дата:", "Время:", "Причина:"], listLabels: ["Имя:", "Дата:", "Причина:"], del: "Удл", rules: ["1. Человек, чье имя здесь, умрет.", "2. Нужно знать лицо жертвы.", "3. Причина смерти за 40 сек.", "4. Иначе - сердечный приступ.", "5. Нажмите Да, если поняли."] },
+    cn: { agree: "同意", addButton: "记录", placeholders: ["姓名:", "日期:", "时间:", "原因:"], listLabels: ["姓名:", "日期:", "原因:"], del: "删除", rules: ["1. 名字写在上面的人就会死。", "2. 必须知道对方的长상。", "3. 40秒内可以写하死인。", "4. 否则将死于心脏마비。", "5. 理解规则后请点击同意。"] }
 };
 
 let currentLang = localStorage.getItem("dnLang") || "ko";
 let deathList = JSON.parse(localStorage.getItem("dnList")) || [];
-let typingInterval, editingIndex = -1;
 
 function updateUI(){
     const t = translations[currentLang];
@@ -147,73 +170,24 @@ function renderList() {
     listEl.innerHTML = "";
     deathList.forEach((item, index) => {
         const li = document.createElement("li");
-        if (editingIndex === index) {
-            li.innerHTML = `
-                <div class="li-content">
-                    <input type="text" class="edit-input" id="editName" value="${item.name}">
-                    <input type="text" class="edit-input" id="editYear" value="${item.year}">
-                    <input type="text" class="edit-input" id="editTime" value="${item.time}">
-                    <input type="text" class="edit-input" id="editReason" value="${item.reason}">
-                </div>
-                <div class="li-btns">
-                    <button class="small-btn" onclick="saveEdit(${index})">${t.save}</button>
-                    <button class="small-btn" onclick="cancelEdit()">X</button>
-                </div>`;
-        } else {
-            li.innerHTML = `
-                <div class="li-content"><b>${t.listLabels[0]}</b> ${item.name} | <b>${t.listLabels[1]}</b> ${item.year} (${item.time})<br><b>${t.listLabels[2]}</b> ${item.reason}</div>
-                <div class="li-btns">
-                    <button class="small-btn" onclick="startEdit(${index})">${t.edit}</button>
-                    <button class="small-btn" onclick="deleteItem(${index})">${t.del}</button>
-                </div>`;
-        }
+        li.innerHTML = `<div class="li-content"><b>${t.listLabels[0]}</b> ${item.name} | <b>${t.listLabels[1]}</b> ${item.year} (${item.time})<br><b>${t.listLabels[2]}</b> ${item.reason}</div>
+            <div class="li-btns"><button class="small-btn" onclick="deleteItem(${index})">${t.del}</button></div>`;
         listEl.appendChild(li);
     });
 }
 
-function startEdit(index) { editingIndex = index; renderList(); }
-function cancelEdit() { editingIndex = -1; renderList(); }
-
-function saveEdit(index) {
-    const vals = ["editName","editYear","editTime","editReason"].map(id => document.getElementById(id).value.trim());
-    if (vals.some(v => !v)) return;
-    deathList[index] = { name: vals[0], year: vals[1], time: vals[2], reason: vals[3] };
-    localStorage.setItem("dnList", JSON.stringify(deathList));
-    editingIndex = -1;
-    renderList();
-}
-
-function typeMessage(text) {
-    clearInterval(typingInterval);
-    const container = document.getElementById("msgContainer");
-    container.innerHTML = "";
-    const msgDiv = document.createElement("div");
-    msgDiv.className = "death-message";
-    container.appendChild(msgDiv);
-    let i = 0;
-    typingInterval = setInterval(() => {
-        if (text.substring(i, i+4) === "<br>") { msgDiv.innerHTML += "<br>"; i += 4; }
-        else { msgDiv.innerHTML += text[i]; i++; }
-        if (i >= text.length) { clearInterval(typingInterval); msgDiv.classList.add("flashing"); }
-    }, 70);
-}
-
 function deleteItem(index) {
-    const name = deathList[index].name;
     deathList.splice(index, 1);
     localStorage.setItem("dnList", JSON.stringify(deathList));
     renderList();
-    typeMessage(translations[currentLang].deleteMsg(name));
 }
 
 document.getElementById("recordBtn").addEventListener("click", () => {
     const vals = ["name","year","time","reason"].map(id => document.getElementById(id).value.trim());
     if (vals.some(v => !v)) return;
-    const newItem = { name: vals[0], year: vals[1], time: vals[2], reason: vals[3] };
-    deathList.unshift(newItem);
+    deathList.unshift({ name: vals[0], year: vals[1], time: vals[2], reason: vals[3] });
     localStorage.setItem("dnList", JSON.stringify(deathList));
     updateUI();
-    typeMessage(translations[currentLang].deathMsg(...vals));
     ["name","year","time","reason"].forEach(id => document.getElementById(id).value = "");
 });
 
