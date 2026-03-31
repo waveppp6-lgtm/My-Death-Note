@@ -74,17 +74,24 @@ select, .btn-style {
 
 /* 메인 화면 */
 #deathNote { display: none; margin-top: 40px; }
-.title-section { position: relative; display: inline-block; margin-bottom: 30px; }
 
-/* 리스트 스크롤 박스 */
+.title-section { position: relative; display: inline-block; margin-bottom: 30px; }
+.title-section h1 {
+    font-size: 3.5rem; margin: 0; font-family: 'Creepster';
+    display: inline-block;
+    border-bottom: 4px solid #ff1a1a; /* 빨간색 밑줄 추가 */
+    padding-bottom: 5px;
+}
+
+/* 리스트 스크롤 박스 + 빨간 테두리 */
 #listContainer {
-    height: 250px;
+    height: 300px;
     overflow-y: auto;
     width: 100%;
     max-width: 600px;
     margin: 10px auto;
-    border: 1px solid #333;
-    background: rgba(10, 0, 0, 0.5);
+    border: 2px solid #ff1a1a; /* 빨간색 테두리 */
+    background: rgba(10, 0, 0, 0.7);
     scrollbar-width: thin;
     scrollbar-color: red black;
 }
@@ -96,15 +103,16 @@ input, #recordBtn {
 }
 
 /* 사망 메시지 */
-#msgContainer { margin: 20px auto; min-height: 25px; }
+#msgContainer { margin: 20px auto; min-height: 50px; padding: 0 10px; }
 .death-message { 
-    font-size: 18px; font-weight: bold; color: #ff0000;
+    font-size: 17px; font-weight: bold; color: #ff0000;
     text-shadow: 0 0 10px rgba(255,0,0,0.7);
     animation: fadeIn 0.8s ease;
+    line-height: 1.4;
 }
 
 ol { list-style: none; padding: 0; margin: 0; }
-li { padding: 15px; border-bottom: 1px solid #333; text-align: left; animation: fadeIn 0.5s; }
+li { padding: 15px; border-bottom: 1px solid #444; text-align: left; animation: fadeIn 0.5s; }
 @keyframes fadeIn { from {opacity:0} to {opacity:1} }
 </style>
 </head>
@@ -127,7 +135,7 @@ li { padding: 15px; border-bottom: 1px solid #333; text-align: left; animation: 
                 <option value="mobile">Mobile</option>
             </select>
         </div>
-        <h1 id="rulesMainTitle" style="font-family:'Creepster'; font-size: 3rem;">How to use it</h1>
+        <h1 id="rulesMainTitle" style="font-family:'Creepster'; font-size: 3.5rem;">RULES</h1>
         <div id="rulesContent"></div>
         <button id="agreeBtn" class="btn-style" style="padding: 10px 40px;">AGREE</button>
     </div>
@@ -136,11 +144,11 @@ li { padding: 15px; border-bottom: 1px solid #333; text-align: left; animation: 
 <div id="mainWrapper">
     <div id="deathNote">
         <div class="title-section">
-            <h1 style="font-size: 3.5rem; margin:0; font-family:'Creepster'">Death Note</h1>
-            <button id="viewRulesBtn" class="btn-style" style="position:absolute; bottom:-15px; right:-20px; font-size: 10px;">RULES</button>
+            <h1>Death Note</h1>
+            <button id="viewRulesBtn" class="btn-style" style="position:absolute; bottom:-25px; right:-20px; font-size: 10px;">RULES</button>
         </div>
         
-        <div class="container">
+        <div class="container" style="margin-top: 20px;">
             <input type="text" id="name" placeholder="">
             <input type="text" id="year" placeholder="">
             <input type="text" id="time" placeholder="">
@@ -159,23 +167,23 @@ li { padding: 15px; border-bottom: 1px solid #333; text-align: left; animation: 
 
 <script>
 const rulesText = {
-    ko: ["1. 이 노트에 이름이 적힌 인간은 죽는다.", "2. 적으려는 인물의 얼굴을 모르면 효과가 없다.", "3. 이름 뒤에 40초 내에 사인을 적으면 그대로 죽는다.", "4. 사인을 적지 않으면 모두 심장마비로 죽는다.", "5. 사인을 적으면 죽음의 상황을 기재할 6분 40초의 시간이 주어진다."],
-    en: ["1. The human whose name is written in this note shall die.", "2. This note will not take effect unless the writer has the person's face in mind.", "3. If the cause of death is written within 40 seconds, it will happen.", "4. If the cause of death is not specified, the person will die of a heart attack.", "5. After writing the cause, details of the death should be written in the next 6 minutes and 40 seconds."],
-    jp: ["1. このノートに名前を書かれた人間は死ぬ。", "2. 書く人物の顔が頭に入っていないと効果はない。", "3. 名前の後に40秒以内に死因を書くとその通りになる。", "4. 死因を書かなければ全て心臓麻痺となる。", "5. 死因を書くとさらに6分40秒間の詳しい死の状況を記載する時間が与えられる。"],
-    ru: ["1. Человек, чье имя записано в этой тетради, умрет.", "2. Тетрадь не подействует, если вы не знаете лица жертвы.", "3. Если причина смерти написана в течение 40 секунд, так и случится.", "4. Если причина не указана, человек умрет от сердечного приступа.", "5. После написания причины у вас есть 6 минут 40 секунд для деталей."],
-    cn: ["1. 名字被写在名字被写在笔记上的人都会死。", "2. 如果不知道对方的面孔，笔记将不会生效。", "3. 在写下名字后的40秒内编写死因，对方就会照此死去。", "4. 如果没有写死因，那个人将死于心脏麻痹。", "5. 写下死因后，你还有6分40秒的时间可以记入详细的死亡过程。"]
+    ko: ["1. 이 노트에 이름이 적힌 인간은 죽는다.", "2. 적으려는 인물의 얼굴을 모르면 효과가 없다.", "3. 이름 뒤에 40초 내에 사인을 적으면 그대로 죽는다.", "4. 사인을 적지 않으면 모두 심장마비로 죽는다.", "5. 모든 규칙을 이해했다면 동의를 누르십시오."],
+    en: ["1. The human whose name is written in this note shall die.", "2. This note will not take effect unless the writer has the person's face in mind.", "3. If the cause of death is written within 40 seconds, it will happen.", "4. If the cause of death is not specified, they die of a heart attack.", "5. Click AGREE if you understand all rules."],
+    jp: ["1. このノートに名前を書かれた人間は死ぬ。", "2. 書く人物の顔が頭に入っていないと効果はない。", "3. 名前の後に40秒以内に死因を書くとその通りになる。", "4. 死因を書かなければ全て心臓麻痺となる。", "5. 同意する場合はボタンを押してください。"],
+    ru: ["1. Человек, чье имя записано в этой тетради, умрет.", "2. Тетрадь не подействует, если вы не знаете лица жертвы.", "3. Если причина смерти написана в течение 40 секунд, так и случится.", "4. Если причина не указана, человек умрет от сердечного приступа.", "5. Нажмите AGREE, если вы поняли правила."],
+    cn: ["1. 名字被写在笔记上的人都会死。", "2. 如果不知道对方的面孔，笔记将不会生效。", "3. 在写下名字后的40秒内编写死因，对方就会照此死去。", "4. 如果没有写死因，那个人将死于心脏麻痹。", "5. 如果理解请点击同意。"]
 };
 
 const translations = {
-    ko: { rulesTitle: "How to use it", agree: "동의", alertEmpty: "모든 항목을 입력해주세요!", addButton: "기록하기", deathMessage: (n)=>`▷ ${n}은(는) 사망했습니다.`, placeholder: {name:"이름",year:"날짜",time:"시간",reason:"사인"}, inputLabels:["이름:","사인:"] },
-    en: { rulesTitle: "How to use it", agree: "AGREE", alertEmpty: "Please fill all fields!", addButton: "Record", deathMessage: (n)=>`▷ ${n} has died.`, placeholder: {name:"Name",year:"Date",time:"Time",reason:"Reason"}, inputLabels:["Name:","Reason:"] },
-    jp: { rulesTitle: "How to use it", agree: "同意", alertEmpty: "入力してください！", addButton: "記録", deathMessage: (n)=>`▷ ${n}は死亡した。`, placeholder: {name:"名前",year:"年月日",time:"時間",reason:"理由"}, inputLabels:["名前:","理由:"] },
-    ru: { rulesTitle: "How to use it", agree: "СОГЛАСЕН", alertEmpty: "Заполните поля!", addButton: "Записать", deathMessage: (n)=>`▷ ${n} умер.`, placeholder: {name:"Имя",year:"Дата",time:"Время",reason:"Причина"}, inputLabels:["Имя:","Причина:"] },
-    cn: { rulesTitle: "How to use it", agree: "同意", alertEmpty: "请填写字段！", addButton: "添加", deathMessage: (n)=>`▷ ${n}死亡了。`, placeholder: {name:"姓名",year:"日期",time:"时间",reason:"原因"}, inputLabels:["姓名:","原因:"] }
+    ko: { rulesTitle: "RULES", agree: "동의", alertEmpty: "모든 항목을 입력해주세요!", addButton: "기록하기", deathMessage: (n,y,t,r)=>`▷ ${n}은(는) 사망했습니다.<br>(${y} ${t}, 사유: ${r})`, placeholder: {name:"이름",year:"날짜",time:"시간",reason:"사인"}, inputLabels:["이름:","사인:"] },
+    en: { rulesTitle: "RULES", agree: "AGREE", alertEmpty: "Please fill all fields!", addButton: "Record", deathMessage: (n,y,t,r)=>`▷ ${n} has died.<br>(${y} ${t}, Cause: ${r})`, placeholder: {name:"Name",year:"Date",time:"Time",reason:"Reason"}, inputLabels:["Name:","Reason:"] },
+    jp: { rulesTitle: "ルール", agree: "同意", alertEmpty: "入力してください！", addButton: "記録", deathMessage: (n,y,t,r)=>`▷ ${n}は死亡した。<br>(${y} ${t}, 理由: ${r})`, placeholder: {name:"名前",year:"年月日",time:"時間",reason:"理由"}, inputLabels:["名前:","理由:"] },
+    ru: { rulesTitle: "ПРАВИЛА", agree: "СОГЛАСЕН", alertEmpty: "Заполните поля!", addButton: "Записать", deathMessage: (n,y,t,r)=>`▷ ${n} умер.<br>(${y} ${t}, причина: ${r})`, placeholder: {name:"Имя",year:"Дата",time:"Время",reason:"Причина"}, inputLabels:["Имя:","Причина:"] },
+    cn: { rulesTitle: "规则", agree: "同意", alertEmpty: "请填写字段！", addButton: "添加", deathMessage: (n,y,t,r)=>`▷ ${n}死亡了。<br>(${y} ${t}, 原因: ${r})`, placeholder: {name:"姓名",year:"日期",time:"时间",reason:"原因"}, inputLabels:["姓名:","原因:"] }
 };
 
-let currentLang = "ko";
-let lastVictimName = null;
+let currentLang = localStorage.getItem("deathNoteLang") || "ko";
+let deathList = JSON.parse(localStorage.getItem("deathNoteList")) || [];
 
 const deathNote = document.getElementById("deathNote");
 const rulesOverlay = document.getElementById("rulesOverlay");
@@ -194,6 +202,19 @@ function updateUI(){
     document.getElementById("time").placeholder = t.placeholder.time;
     document.getElementById("reason").placeholder = t.placeholder.reason;
     document.getElementById("recordBtn").textContent = t.addButton;
+    renderList();
+}
+
+// 리스트 화면에 그리기
+function renderList() {
+    const listEl = document.getElementById("list");
+    const t = translations[currentLang];
+    listEl.innerHTML = "";
+    deathList.forEach(item => {
+        const li = document.createElement("li");
+        li.innerHTML = `<div><b>${t.inputLabels[0]}</b> ${item.name} | <b>${t.inputLabels[1]}</b> ${item.reason}</div>`;
+        listEl.appendChild(li);
+    });
 }
 
 document.getElementById("deviceSelect").addEventListener("change", (e) => {
@@ -202,6 +223,7 @@ document.getElementById("deviceSelect").addEventListener("change", (e) => {
 
 document.getElementById("langSelect").addEventListener("change", (e)=>{
     currentLang = e.target.value;
+    localStorage.setItem("deathNoteLang", currentLang);
     updateUI();
 });
 
@@ -236,23 +258,26 @@ document.getElementById("recordBtn").addEventListener("click", ()=>{
 
     if(!name || !year || !time || !reason){ alert(t.alertEmpty); return; }
 
-    // 이전 사람 사망 메시지 출력
-    if(lastVictimName) {
+    // 이전 사람 사망 메시지 출력 (리스트의 가장 최근 항목)
+    if(deathList.length > 0) {
+        const last = deathList[0];
         const msgContainer = document.getElementById("msgContainer");
-        msgContainer.innerHTML = `<div class="death-message">${t.deathMessage(lastVictimName)}</div>`;
+        msgContainer.innerHTML = `<div class="death-message">${t.deathMessage(last.name, last.year, last.time, last.reason)}</div>`;
     }
 
-    // 리스트 추가
-    const li = document.createElement("li");
-    li.innerHTML = `<div><b>${t.inputLabels[0]}</b> ${name} | <b>${t.inputLabels[1]}</b> ${reason}</div>`;
-    document.getElementById("list").prepend(li);
+    // 데이터 저장
+    const newItem = { name, year, time, reason };
+    deathList.unshift(newItem); // 최신순으로 처음에 추가
+    localStorage.setItem("deathNoteList", JSON.stringify(deathList));
 
-    lastVictimName = name;
+    renderList();
 
     ["name","year","time","reason"].forEach(id => document.getElementById(id).value="");
 });
 
+// 초기 실행
 updateUI();
+document.getElementById("langSelect").value = currentLang;
 </script>
 </body>
 </html>
