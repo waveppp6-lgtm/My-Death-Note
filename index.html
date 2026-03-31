@@ -2,38 +2,280 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Death Note</title>
-
-<meta property="og:title" content="DEATH NOTE">
-<meta property="og:description" content="이름을 적으시겠습니까? 40초 뒤에 이름은 사라집니다... 📓🖋️">
-<meta property="og:image" content="https://raw.githubusercontent.com/waveppp6-lgtm/My-Death-Note/main/preview.jpg">
-<meta property="og:url" content="https://waveppp6-lgtm.github.io/My-Death-Note/">
-<meta name="theme-color" content="#000000">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Death Note - Dual Mode</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
 
 <style>
+/* --- 공통 스타일 --- */
+:root {
+    --death-red: #ff1a1a;
+    --death-black: #000000;
+}
+
 body {
     margin: 0;
+    padding: 0;
     font-family: "궁서", serif;
-    background: radial-gradient(circle, #111 0%, #000 100%);
-    color: #ff1a1a;
-    text-align: center;
+    background: #000;
+    color: var(--death-red);
     overflow-x: hidden;
 }
 
-/* 룰 화면 */
+/* 커튼 애니메이션 */
+#curtain-left, #curtain-right {
+    position: fixed;
+    top: 0; width: 50%; height: 100%;
+    background: #000;
+    z-index: 10000;
+    transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+    border: 1px solid #1a1a1a;
+}
+#curtain-left { left: 0; }
+#curtain-right { right: 0; }
+.open #curtain-left { transform: translateX(-100%); }
+.open #curtain-right { transform: translateX(100%); }
+
+/* 룰 오버레이 (풀스크린) */
 #rulesOverlay {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
     background: black;
-    color: red;
-    font-family: 'Creepster', "궁서", serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* --- [핵심] PC vs MOBILE 레이아웃 구분 --- */
+
+/* 1. PC 모드 (기본) */
+.main-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 50px 20px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr; /* 입력창과 리스트를 나란히 */
+    gap: 40px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* 2. MOBILE 모드 (클래스 추가 시) */
+.mobile-mode .main-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    max-width: 100%;
+}
+
+.mobile-mode h1 { font-size: 2.5rem; }
+.mobile-mode .mini-rules { margin: 10px auto; text-align: center; }
+
+/* 공통 요소 스타일 */
+#deathNote { display: none; }
+.visible #deathNote { display: block; }
+.visible .main-wrapper { opacity: 1; }
+
+h1 { 
+    font-family: 'Creepster', cursive; 
+    font-size: 4rem; 
+    text-shadow: 0 0 15px var(--death-red);
+    grid-column: span 2; /* PC에선 제목이 전체 차지 */
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: rgba(20, 0, 0, 0.5);
+    padding: 30px;
+    border: 1px solid #333;
+}
+
+input, button {
+    padding: 15px;
+    background: #000;
+    border: 1px solid var(--death-red);
+    color: var(--death-red);
+    font-size: 1.1rem;
+}
+
+button { cursor: pointer; transition: 0.3s; font-family: 'Creepster'; }
+button:hover { background: var(--death-red); color: #000; }
+
+/* 리스트 섹션 */
+.list-section {
+    border-left: 1px solid #333;
+    padding-left: 20px;
+}
+.mobile-mode .list-section {
+    border-left: none;
+    border-top: 1px solid #333;
+    padding: 20px 0;
+}
+
+.mini-rules {
+    font-size: 0.8rem;
+    border: 1px solid #444;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+li {
+    list-style: none;
+    padding: 20px;
+    border: 2px solid var(--death-red);
+    background: #050000;
+    margin-bottom: 15px;
+    text-align: left;
+    box-shadow: inset 0 0 10px rgba(255,0,0,0.2);
+}
+
+.death-text {
+    color: #ff0000;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+    text-decoration: underline;
+}
+
+/* 상단 컨트롤바 */
+.controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 10001;
+}
+select {
+    background: #000;
+    color: var(--death-red);
+    border: 1px solid var(--death-red);
+    padding: 5px;
+}
+</style>
+</head>
+<body>
+
+<div id="curtain-left"></div>
+<div id="curtain-right"></div>
+
+<div class="controls">
+    <select id="langSelect">
+        <option value="ko">KOREAN</option>
+        <option value="en">ENGLISH</option>
+    </select>
+    <select id="modeSelect">
+        <option value="pc">PC MODE</option>
+        <option value="mobile">MOBILE MODE</option>
+    </select>
+</div>
+
+<div id="rulesOverlay">
+    <h1 style="margin-bottom: 30px;">RULES</h1>
+    <div id="rulesContent" style="max-width: 400px; text-align: left; margin-bottom: 30px; line-height: 1.8;"></div>
+    <button id="agreeBtn" style="padding: 10px 50px; font-size: 1.5rem;">AGREE</button>
+</div>
+
+<div id="deathNote">
+    <div class="main-wrapper" id="mainWrapper">
+        <h1>Death Note</h1>
+        
+        <div class="input-section">
+            <div class="mini-rules" id="miniRules"></div>
+            <input type="text" id="name" placeholder="이름">
+            <input type="text" id="year" placeholder="날짜">
+            <input type="text" id="time" placeholder="시간">
+            <input type="text" id="reason" placeholder="사인">
+            <button id="recordBtn">RECORD</button>
+        </div>
+
+        <div class="list-section">
+            <h2 style="font-family: 'Creepster';">DEATH LIST</h2>
+            <div id="listContainer"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+const data = {
+    ko: {
+        rules: ["1. 정보를 정확히 입력하십시오.", "2. 새 기록 시 이전 명단은 즉시 파기됩니다.", "3. 사인은 붉은 글씨로 하단에 표시됩니다."],
+        placeholders: ["이름", "날짜", "시간", "사인"],
+        alert: (n, r) => `${n}은(는) 사망했다. (사인: ${r})`,
+        agree: "동의"
+    },
+    en: {
+        rules: ["1. Enter information accurately.", "2. Previous record is destroyed upon new entry.", "3. Death cause is displayed in red at the bottom."],
+        placeholders: ["Name", "Date", "Time", "Reason"],
+        alert: (n, r) => `${n} has died. (Cause: ${r})`,
+        agree: "AGREE"
+    }
+};
+
+let lang = "ko";
+
+function update() {
+    const d = data[lang];
+    document.getElementById("rulesContent").innerHTML = d.rules.map(r => `<p>${r}</p>`).join("");
+    document.getElementById("miniRules").innerHTML = d.rules.map(r => `<div>${r}</div>`).join("");
+    document.getElementById("agreeBtn").textContent = d.agree;
+    const ids = ["name", "year", "time", "reason"];
+    ids.forEach((id, i) => document.getElementById(id).placeholder = d.placeholders[i]);
+}
+
+// 모드 전환 로직
+document.getElementById("modeSelect").addEventListener("change", (e) => {
+    if(e.target.value === "mobile") document.body.classList.add("mobile-mode");
+    else document.body.classList.remove("mobile-mode");
+});
+
+// 커튼 & 동의
+document.getElementById("agreeBtn").addEventListener("click", () => {
+    document.body.classList.add("open");
+    setTimeout(() => {
+        document.getElementById("rulesOverlay").style.display = "none";
+        document.body.classList.add("visible");
+    }, 1200);
+});
+
+// 기록 (이전 것 지우고 새로 추가)
+document.getElementById("recordBtn").addEventListener("click", () => {
+    const n = document.getElementById("name").value;
+    const y = document.getElementById("year").value;
+    const t = document.getElementById("time").value;
+    const r = document.getElementById("reason").value;
+
+    if(!n || !y || !t || !r) return alert("모든 칸을 채우십시오.");
+
+    const container = document.getElementById("listContainer");
+    container.innerHTML = `
+        <li>
+            <div style="font-size: 0.9rem; color: #888;">DATE: ${y} | TIME: ${t}</div>
+            <div style="font-size: 1.2rem; margin-top: 5px;">TARGET: ${n}</div>
+            <span class="death-text">${data[lang].alert(n, r)}</span>
+        </li>
+    `;
+
+    ["name", "year", "time", "reason"].forEach(id => document.getElementById(id).value = "");
+});
+
+document.getElementById("langSelect").addEventListener("change", (e) => {
+    lang = e.target.value;
+    update();
+});
+
+update();
+</script>
+</body>
+</html>
     align-items: center;
     text-shadow: 0 0 10px red, 0 0 20px red;
     z-index: 9999;
