@@ -25,7 +25,7 @@ body {
     padding: 20px;
 }
 
-/* 룰 화면 */
+/* 룰 화면 디자인 */
 #rulesOverlay {
     position: fixed;
     top: 0; left: 0;
@@ -48,13 +48,20 @@ body {
     max-width: 600px;
 }
 
-/* 선택 박스만 우측 상단으로 */
+/* 룰 제목 - 박스 밖 상단 중앙 */
+#rulesMainTitle {
+    font-family: 'Creepster', "궁서";
+    font-size: 4rem;
+    margin: 0 0 20px 0;
+    text-shadow: 0 0 15px red;
+}
+
+/* 선택 박스 그룹 (우측 상단 정렬) */
 .select-group { 
-    position: absolute;
-    top: -40px;
-    right: 0;
     display: flex; 
+    justify-content: flex-end; 
     gap: 10px; 
+    margin-bottom: 5px;
 }
 select, .btn-style {
     background: black; color: red; border: 1px solid red;
@@ -84,42 +91,44 @@ select, .btn-style {
     margin-top: 20px;
 }
 
-/* 입력 영역 */
+/* 입력 영역 - 라벨 정렬 및 크기 통일 */
+.container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 100px; }
 .input-row { 
     display: flex; align-items: center; justify-content: center; 
-    gap: 10px; width: 90%; max-width: 500px; margin: 0 auto 15px;
+    gap: 15px; width: 100%; max-width: 500px;
 }
-.input-row label { font-weight: bold; min-width: 50px; text-align: right; }
+.input-row label { font-weight: bold; min-width: 60px; text-align: right; font-size: 18px; }
 input { 
     flex: 1; padding: 12px; background: black; border: 1px solid red; 
-    color: red; font-size: 16px;
+    color: red; font-size: 16px; outline: none;
 }
 
-/* 리스트 스타일 */
+/* 리스트 스타일 - 요청하신 줄바꿈 형태 */
 #listContainer {
-    height: 350px; overflow-y: auto; width: 100%; max-width: 800px;
+    height: 350px; overflow-y: auto; width: 100%; max-width: 700px;
     margin: 30px auto; border: 2px solid #ff1a1a;
     background: rgba(10, 0, 0, 0.8);
+    text-align: left;
 }
+ol { list-style: none; padding: 0; margin: 0; }
 li { 
-    padding: 15px; border-bottom: 1px solid #444; text-align: left; 
-    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px; border-bottom: 1px solid #444; 
+    line-height: 1.6;
 }
-.future-tag { color: #888; font-size: 12px; font-style: italic; }
+.future-tag { 
+    display: block; /* 엔터 친 효과 */
+    color: #888; font-size: 13px; font-style: italic; margin-top: 5px;
+}
 
-/* 사망 메시지 반짝임 효과 */
+/* 사망 메시지 */
 #msgContainer { margin: 30px auto; min-height: 80px; }
 .death-message { 
     font-size: 20px; font-weight: bold; color: #ff0000;
     text-shadow: 0 0 15px rgba(255,0,0,0.8);
-    animation: flashFade 1s infinite alternate;
+    animation: flashFade 1.2s infinite alternate;
 }
-@keyframes flashFade { 
-    from { opacity: 1; } 
-    to { opacity: 0.4; } 
-}
+@keyframes flashFade { from { opacity: 1; } to { opacity: 0.3; } }
 
-ol { list-style: none; padding: 0; margin: 0; }
 </style>
 </head>
 <body>
@@ -128,11 +137,13 @@ ol { list-style: none; padding: 0; margin: 0; }
     <div class="curtain" id="leftCurtain"></div>
     <div class="curtain" id="rightCurtain"></div>
     <div class="rules-inner" id="rulesWrapper">
-        <div class="select-group">
+        <h1 id="rulesMainTitle">RULES</h1> <div class="select-group">
             <select id="langSelect">
                 <option value="ko">한국어</option>
                 <option value="en">English</option>
                 <option value="jp">日本語</option>
+                <option value="ru">Русский</option>
+                <option value="cn">中文</option>
             </select>
             <select id="deviceSelect">
                 <option value="pc">Pc</option>
@@ -140,10 +151,9 @@ ol { list-style: none; padding: 0; margin: 0; }
             </select>
         </div>
         <div id="rulesContent">
-            <h1 id="rulesMainTitle" style="font-family:'Creepster'; text-align:center; margin-top:0;">RULES</h1>
             <div id="rulesList"></div>
         </div>
-        <button id="agreeBtn" class="btn-style" style="margin-top: 30px; padding: 12px 80px;">AGREE</button>
+        <button id="agreeBtn" class="btn-style" style="margin-top: 30px; padding: 12px 100px; font-size: 18px;">AGREE</button>
     </div>
 </div>
 
@@ -152,15 +162,15 @@ ol { list-style: none; padding: 0; margin: 0; }
         <div class="title-section">
             <h1>Death Note</h1>
             <div class="title-underline"></div>
-            <button id="viewRulesBtn" class="btn-style" style="position:absolute; right: 20px; bottom: -70px; padding: 10px 20px;">RULES</button>
+            <button id="viewRulesBtn" class="btn-style" style="position:absolute; right: 20px; bottom: -70px; padding: 10px 25px;">RULES</button>
         </div>
         
-        <div class="container" style="margin-top: 100px;">
-            <div class="input-row"><label id="lb1">누가:</label><input type="text" id="name"></div>
-            <div class="input-row"><label id="lb2">언제:</label><input type="text" id="year"></div>
-            <div class="input-row"><label id="lb3">몇시:</label><input type="text" id="time"></div>
-            <div class="input-row"><label id="lb4">왜:</label><input type="text" id="reason"></div>
-            <button id="recordBtn" class="btn-style" style="width: 90%; max-width: 500px; margin-top: 10px; font-size: 20px;">기록하기</button>
+        <div class="container">
+            <div class="input-row"><label id="lb1">이름:</label><input type="text" id="name"></div>
+            <div class="input-row"><label id="lb2">날짜:</label><input type="text" id="year"></div>
+            <div class="input-row"><label id="lb3">시간:</label><input type="text" id="time"></div>
+            <div class="input-row"><label id="lb4">사유:</label><input type="text" id="reason"></div>
+            <button id="recordBtn" class="btn-style" style="width: 100%; max-width: 500px; margin-top: 5px; font-size: 20px; padding: 12px 0;">기록하기</button>
         </div>
 
         <div id="msgContainer"></div>
@@ -176,13 +186,17 @@ ol { list-style: none; padding: 0; margin: 0; }
 const rulesText = {
     ko: ["1. 이 노트에 이름이 적힌 인간은 죽는다.", "2. 얼굴을 모르면 효과가 없다.", "3. 40초 내에 사인을 적으면 그대로 죽는다.", "4. 사인을 적지 않으면 심장마비로 죽는다.", "5. 모든 규칙을 이해했다면 동의를 누르십시오."],
     en: ["1. The human whose name is written shall die.", "2. Face is required for effect.", "3. Cause of death must be written in 40s.", "4. Default cause is heart attack.", "5. Click AGREE to proceed."],
-    jp: ["1. 名前を書かれた人間は死ぬ。", "2. 顔を知らないと効果はない。", "3. 40秒以内に死因を書くこと。", "4. 書かなければ心臓麻痺となる。", "5. 同意する場合はボタンを押して。"]
+    jp: ["1. 名前を書かれた人間は死ぬ。", "2. 顔を知らないと効果はない。", "3. 40秒以内に死因を書くこと。", "4. 書かなければ心臓麻痺となる。", "5. 同意する場合はボタンを押して。"],
+    ru: ["1. Человек, чье имя записано здесь, умрет.", "2. Тетрадь не подействует без лица.", "3. Причина смерти пишется за 40 сек.", "4. Без причины - сердечный приступ.", "5. Нажмите Согласен."],
+    cn: ["1. 名字被写在笔记上的人都会死。", "2. 不知道面孔将不会生效。", "3. 40秒内编写死因。", "4. 没写死因将死于心脏麻痹。", "5. 请点击同意。"]
 };
 
 const translations = {
-    ko: { agree: "동의", addButton: "기록하기", labels: ["누가:","언제:","몇시:","왜:"], future: "(미래의 사망)" },
-    en: { agree: "AGREE", addButton: "Record", labels: ["Who:","When:","Time:","Why:"], future: "(Future Death)" },
-    jp: { agree: "同意", addButton: "記録", labels: ["名前:","日付:","時間:","理由:"], future: "(未来の死)" }
+    ko: { agree: "동의", addButton: "기록하기", labels: ["이름:","날짜:","시간:","사유:"], future: "(미래의 사망)" },
+    en: { agree: "AGREE", addButton: "Record", labels: ["Name:","Date:","Time:","Reason:"], future: "(Future Death)" },
+    jp: { agree: "同意", addButton: "記録", labels: ["名前:","日付:","時間:","理由:"], future: "(未来の死)" },
+    ru: { agree: "Согласен", addButton: "Записать", labels: ["Имя:","Дата:","Время:","Причина:"], future: "(Будущая смерть)" },
+    cn: { agree: "同意", addButton: "添加", labels: ["姓名:","日期:","时间:","原因:"], future: "(未来的死亡)" }
 };
 
 let currentLang = localStorage.getItem("dnLang") || "ko";
@@ -206,8 +220,8 @@ function renderList() {
     deathList.forEach(item => {
         const li = document.createElement("li");
         li.innerHTML = `
-            <span><b>${item.name}</b> | ${item.year} (${item.time}) | 사유: ${item.reason}</span>
-            <span class="future-tag">${t.future}</span>
+            <div><b>이름:</b> ${item.name} | <b>일시:</b> ${item.year} (${item.time}) | <b>사유:</b> ${item.reason}</div>
+            <div class="future-tag">${t.future}</div>
         `;
         listEl.appendChild(li);
     });
@@ -257,15 +271,14 @@ document.getElementById("recordBtn").addEventListener("click", ()=>{
     localStorage.setItem("dnList", JSON.stringify(deathList));
     renderList();
 
-    // 사망 메시지 출력 로직 (깜빡임 효과)
+    // 사망 메시지 출력 (반짝임 효과)
     const msgContainer = document.getElementById("msgContainer");
     msgContainer.innerHTML = `<div class="death-message">
         ${n}은(는) 사망했다.<br>
-        ${y}(${t_val})<br>
+        ${y} (${t_val})<br>
         사유: ${r}
     </div>`;
     
-    // 5초 뒤 메시지 삭제
     setTimeout(() => { msgContainer.innerHTML = ""; }, 5000);
 
     ["name","year","time","reason"].forEach(id => document.getElementById(id).value="");
