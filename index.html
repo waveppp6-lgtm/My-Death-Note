@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Death Note</title>
+    <title>Death Note - Final</title>
     <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
     <style>
-        :root { --death-red: #ff1a1a; --death-black: #000; }
+        :root { --death-red: #ff1a1a; --border-color: #333; }
         body { margin: 0; padding: 0; font-family: "궁서", serif; background: #000; color: var(--death-red); overflow-x: hidden; }
 
-        /* 커튼 레이어 - 처음에 화면을 가리고 있음 */
+        /* 커튼 레이어 */
         #curtain-left, #curtain-right {
             position: fixed; top: 0; width: 50%; height: 100%; background: #000;
             z-index: 10000; transition: transform 1.5s cubic-bezier(0.7, 0, 0.3, 1);
-            border: 1px solid #1a1a1a; pointer-events: none; /* 클릭 방해 금지 */
+            border: 1px solid #1a1a1a; pointer-events: none;
         }
         #curtain-left { left: 0; } #curtain-right { right: 0; }
         body.open #curtain-left { transform: translateX(-100%); }
@@ -26,40 +26,45 @@
             justify-content: center; align-items: center; z-index: 9999;
         }
         #rulesContent {
-            max-width: 400px; text-align: left; margin: 20px; line-height: 1.6;
-            border: 1px solid #333; padding: 20px; font-size: 0.9rem;
+            max-width: 400px; text-align: left; margin: 20px; line-height: 1.8;
+            border: 1px solid var(--border-color); padding: 20px; background: #050000;
         }
 
-        /* 메인 화면 */
+        /* 메인 화면 레이아웃 (PC) */
         #deathNote { display: none; opacity: 0; transition: opacity 1s; padding: 20px; }
         body.visible #deathNote { display: block; opacity: 1; }
-
-        .main-wrapper { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
-        h1 { font-family: 'Creepster', cursive; font-size: 3.5rem; text-shadow: 0 0 15px var(--death-red); margin: 10px 0; }
+        .main-wrapper { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        
+        h1 { font-family: 'Creepster', cursive; font-size: 4rem; text-shadow: 0 0 20px var(--death-red); margin: 0; text-align: center; }
 
         /* 미니 룰 박스 */
-        .mini-rules { border: 1px solid var(--death-red); padding: 10px; font-size: 0.8rem; text-align: left; align-self: flex-end; max-width: 250px; background: rgba(20,0,0,0.8); }
+        .mini-rules { border: 1px solid var(--death-red); padding: 10px; font-size: 0.85rem; text-align: left; align-self: flex-end; max-width: 300px; background: rgba(20,0,0,0.8); }
 
-        /* 입력 및 리스트 레이아웃 (PC) */
-        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; text-align: left; }
-        .input-box { display: flex; flex-direction: column; gap: 10px; }
-        input, button { padding: 12px; background: #000; border: 1px solid var(--death-red); color: var(--death-red); font-size: 1rem; }
-        button { cursor: pointer; font-family: 'Creepster'; font-size: 1.2rem; }
+        /* 입력 및 리스트 그리드 */
+        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; text-align: left; }
+        .input-section { display: flex; flex-direction: column; gap: 15px; padding: 25px; border: 1px solid var(--border-color); background: rgba(10,0,0,0.5); }
+        input, button { padding: 15px; background: #000; border: 1px solid var(--death-red); color: var(--death-red); font-size: 1rem; }
+        button { cursor: pointer; font-family: 'Creepster'; font-size: 1.3rem; transition: 0.3s; }
+        button:hover { background: var(--death-red); color: #000; }
 
-        /* 사망 문구 */
-        .death-list li { list-style: none; padding: 15px; border: 1px solid var(--death-red); margin-bottom: 10px; background: #050000; }
-        .death-msg { color: #ff0000; font-weight: bold; text-decoration: underline; display: block; margin-top: 10px; font-size: 1.1rem; }
+        /* 사망 명단 */
+        .list-section h2 { font-family: 'Creepster'; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        #listContainer li { list-style: none; padding: 20px; border: 2px solid var(--death-red); background: #050000; animation: fadeIn 0.8s ease; }
+        .death-alert-text { color: #ff0000; font-size: 1.4rem; font-weight: bold; margin-top: 15px; display: block; text-decoration: underline; text-shadow: 0 0 5px rgba(255,0,0,0.5); }
 
-        /* 모바일 대응 */
-        @media (max-width: 768px) {
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+
+        /* 모바일 레이아웃 (자동 변환) */
+        @media (max-width: 850px) {
             .content-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 2.5rem; }
-            .mini-rules { align-self: center; }
+            h1 { font-size: 2.8rem; }
+            .mini-rules { align-self: center; text-align: center; }
+            .list-section { border-top: 1px solid var(--border-color); padding-top: 20px; }
         }
 
-        /* 상단 네비 */
-        .nav { position: absolute; top: 10px; right: 10px; z-index: 10001; }
-        select { background: #000; color: var(--death-red); border: 1px solid var(--death-red); padding: 5px; }
+        /* 상단 네비게이션 */
+        .nav { position: absolute; top: 15px; right: 15px; z-index: 10001; }
+        select { background: #000; color: var(--death-red); border: 1px solid var(--death-red); padding: 5px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -76,9 +81,9 @@
     </div>
 
     <div id="rulesOverlay">
-        <h1 style="font-size: 3rem;">RULES</h1>
+        <h1 style="font-size: 3.5rem;">RULES</h1>
         <div id="rulesContent"></div>
-        <button id="agreeBtn">AGREE</button>
+        <button id="agreeBtn" style="padding: 10px 50px;">AGREE</button>
     </div>
 
     <div id="deathNote">
@@ -86,37 +91,37 @@
             <h1>Death Note</h1>
             <div class="mini-rules" id="miniRules"></div>
             <div class="content-grid">
-                <div class="input-box">
+                <div class="input-section">
                     <input type="text" id="name"><input type="text" id="year"><input type="text" id="time"><input type="text" id="reason">
                     <button id="recordBtn">RECORD</button>
                 </div>
-                <div class="list-box">
-                    <h2 style="font-family: 'Creepster';">DEATH LIST</h2>
-                    <div id="listContainer" class="death-list"></div>
+                <div class="list-section">
+                    <h2>DEATH LIST</h2>
+                    <div id="listContainer"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const trans = {
-            ko: { rules: ["1. 정보를 정확히 입력하십시오.", "2. 새 기록 시 이전 명단은 삭제됩니다.", "3. 사인은 붉은 글씨로 표시됩니다."], placeholders: ["이름", "날짜", "시간", "사인"], alert: (n, r) => `${n}은(는) 사망했다. (사인: ${r})`, agree: "동의" },
+        const translations = {
+            ko: { rules: ["1. 정보를 정확히 입력하십시오.", "2. 새 이름 기록 시 이전 명단은 파기됩니다.", "3. 사인은 붉은 글씨로 표시됩니다."], placeholders: ["이름", "날짜 (예: 2026.03.31)", "시간 (예: 14:00)", "사인"], alert: (n, r) => `${n}은(는) 사망했다. (사인: ${r})`, agree: "동의" },
             en: { rules: ["1. Enter info accurately.", "2. New entry clears old record.", "3. Death cause is in red."], placeholders: ["Name", "Date", "Time", "Reason"], alert: (n, r) => `${n} has died. (Cause: ${r})`, agree: "AGREE" },
             jp: { rules: ["1. 正確に入力してください。", "2. 新しい名前で前のは消えます。", "3. 死因は赤文字で表示されます。"], placeholders: ["名前", "日付", "時間", "死因"], alert: (n, r) => `${n}は死亡した。(死因: ${r})`, agree: "同意" },
             ru: { rules: ["1. Введите данные точно.", "2. Старая запись удаляется.", "3. Причина смерти - красным."], placeholders: ["Имя", "Дата", "Время", "Причина"], alert: (n, r) => `${n} умер. (Причина: ${r})`, agree: "Да" },
             cn: { rules: ["1. 请准确输入信息。", "2. 新记录清除旧记录。", "3. 死因以红色显示。"], placeholders: ["姓名", "日期", "时间", "死因"], alert: (n, r) => `${n}已死亡。(死因: ${r})`, agree: "同意" }
         };
 
-        let lang = "ko";
-        function update() {
-            const t = trans[lang];
+        let currentLang = "ko";
+        function updateUI() {
+            const t = translations[currentLang];
             document.getElementById("rulesContent").innerHTML = t.rules.map(r => `<p>${r}</p>`).join("");
             document.getElementById("miniRules").innerHTML = t.rules.map(r => `<div>${r}</div>`).join("");
             document.getElementById("agreeBtn").textContent = t.agree;
             ["name", "year", "time", "reason"].forEach((id, i) => document.getElementById(id).placeholder = t.placeholders[i]);
         }
 
-        document.getElementById("langSelect").addEventListener("change", (e) => { lang = e.target.value; update(); });
+        document.getElementById("langSelect").addEventListener("change", (e) => { currentLang = e.target.value; updateUI(); });
 
         document.getElementById("agreeBtn").addEventListener("click", () => {
             document.body.classList.add("open");
@@ -125,12 +130,13 @@
 
         document.getElementById("recordBtn").addEventListener("click", () => {
             const n = document.getElementById("name").value, y = document.getElementById("year").value, t = document.getElementById("time").value, r = document.getElementById("reason").value;
-            if(!n || !y || !t || !r) return alert("Fill all!");
-            document.getElementById("listContainer").innerHTML = `<li><div>DATE: ${y} / TIME: ${t}</div><div style="font-size: 1.2rem; margin: 5px 0;">TARGET: ${n}</div><span class="death-msg">${trans[lang].alert(n, r)}</span></li>`;
+            if(!n || !y || !t || !r) return alert("All fields required.");
+            const container = document.getElementById("listContainer");
+            container.innerHTML = `<li><div style="color: #666; font-size: 0.9rem;">DATE: ${y} / TIME: ${t}</div><div style="font-size: 1.5rem; margin: 10px 0; color: #fff;">TARGET: ${n}</div><span class="death-alert-text">${translations[currentLang].alert(n, r)}</span></li>`;
             ["name", "year", "time", "reason"].forEach(id => document.getElementById(id).value = "");
         });
 
-        update();
+        updateUI();
     </script>
 </body>
 </html>
