@@ -9,7 +9,6 @@
 <style>
 body { 
     margin: 0; 
-    /* 모든 언어에 대응하는 폰트 패밀리 설정 */
     font-family: 'East Sea Dokdo', 'Rubik Glitch', "Hiragino Mincho ProN", "MS PMincho", "STSong", "궁서", serif; 
     background: radial-gradient(circle, #111 0%, #000 100%); 
     color: #ff1a1a; 
@@ -35,14 +34,13 @@ body {
     width: 90%; 
     max-width: 600px; 
     transition: opacity 0.5s; 
-    margin-top: 60px; /* 룰 박스 위치를 아래로 조정 */
+    margin-top: 60px; 
 }
 
 #rulesMainTitle { font-family: 'Creepster'; font-size: 3.5rem; margin: 0 0 20px 0; text-shadow: 0 0 10px red; }
 .select-group { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 8px; }
 select, .btn-style { background: black; color: red; border: 1px solid red; padding: 8px 12px; font-family: inherit; cursor: pointer; font-size: 18px; }
 
-/* 룰 내용 폰트 사이즈 통일 */
 #rulesContent { 
     height: 250px; 
     overflow-y: auto; 
@@ -50,15 +48,15 @@ select, .btn-style { background: black; color: red; border: 1px solid red; paddi
     border: 2px solid #ff1a1a; 
     padding: 25px; 
     background: rgba(0,0,0,0.9); 
-    font-size: 24px; /* 모든 언어 동일 크기 적용 */
+    font-size: 24px; 
     line-height: 1.4;
     word-break: keep-all;
 }
 
-.title-section { width: 100%; margin-bottom: 40px; position: relative; }
+/* 타이틀 섹션: 언더라인 제거 및 여백 조정 */
+.title-section { width: 100%; margin-bottom: 30px; position: relative; }
 .title-section h1 { font-size: 3.5rem; margin: 0; font-family: 'Creepster'; letter-spacing: 3px; color: #ff1a1a; text-shadow: 0 0 8px #ff0000; }
-.title-underline { width: 100%; height: 4px; background-color: #ff1a1a; margin-top: 15px; }
-#viewRulesBtn { position: absolute; right: 0; top: 75px; padding: 5px 20px; font-size: 18px; }
+#viewRulesBtn { position: absolute; right: 0; top: 15px; padding: 5px 20px; font-size: 18px; }
 
 .container { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 10px; }
 input, #recordBtn { width: 100%; max-width: 350px; padding: 12px; background: black; border: 1px solid red; color: red; font-size: 24px; font-family: inherit; outline: none; box-sizing: border-box; }
@@ -108,7 +106,6 @@ li { padding: 15px 20px; border-bottom: 1px solid #444; display: flex; justify-c
 <div id="mainWrapper">
     <div class="title-section">
         <h1>Death Note</h1>
-        <div class="title-underline"></div>
         <button id="viewRulesBtn" class="btn-style">RULES</button>
     </div>
     <div class="container">
@@ -127,8 +124,8 @@ const translations = {
     ko: { agree: "동의", addButton: "기록하기", save: "저장", placeholders: ["이름:", "날짜:", "시간:", "사유:"], deathMsg: (n,y,t,r) => `${n}은(는) 사망했다.<br>${y} (${t})<br>사유: ${r}`, deleteMsg: (n) => `${n}의 이름이 명단에서 사라졌다.`, listLabels: ["이름:", "일시:", "사유:"], edit: "수정", del: "삭제", rules: ["1. 이 노트에 이름이 적힌 인간은 죽는다.", "2. 얼굴을 모르면 효과가 없다.", "3. 40초 내에 사인을 적으면 그대로 죽는다.", "4. 사인을 적지 않으면 심장마비로 죽는다.", "5. 모든 규칙을 이해했다면 동의를 누르십시오."] },
     en: { agree: "AGREE", addButton: "RECORD", save: "SAVE", placeholders: ["Name:", "Date:", "Time:", "Reason:"], deathMsg: (n,y,t,r) => `${n} has died.<br>${y} (${t})<br>Reason: ${r}`, deleteMsg: (n) => `${n}'s name has vanished.`, listLabels: ["Name:", "Date:", "Reason:"], edit: "Edit", del: "Delete", rules: ["1. The human whose name is written in this note shall die.", "2. It will not take effect unless the writer has the person's face in mind.", "3. If the cause of death is written within 40 seconds, it will happen.", "4. If not specified, the person will die of a heart attack.", "5. If you understand, click Agree."] },
     jp: { agree: "同意", addButton: "記録", save: "保存", placeholders: ["名前:", "日付:", "時間:", "理由:"], deathMsg: (n,y,t,r) => `${n}は死亡した.<br>${y} (${t})<br>理由: ${r}`, deleteMsg: (n) => `${n}の名は消え去った.`, listLabels: ["名前:", "日時:", "理由:"], edit: "修正", del: "削除", rules: ["1. このノートに名前を書かれた人間は死ぬ。", "2. 顔がわからなければ効果はない。", "3. 40秒以内に死因を書けばその通りになる。", "4. 死因を書かなければ心臓麻痺で死ぬ。", "5. 全ての規則を理解したら同意を押せ。"] },
-    ru: { agree: "Да", addButton: "Запись", save: "ОК", placeholders: ["Имя:", "Дата:", "Время:", "Причина:"], deathMsg: (n,y,t,r) => `${n} мертв.<br>${y} (${t})<br>Причина: ${r}`, deleteMsg: (n) => `Имя ${n} стерто.`, listLabels: ["Имя:", "Дата:", "Причина:"], edit: "Изм", del: "Удл", rules: ["1. Человек, чье имя здесь, умрет.", "2. Нужно знать лицо жертвы.", "3. Причина смерти за 40 сек.", "4. Иначе - сердечный приступ.", "5. Нажмите Да, если поняли."] },
-    cn: { agree: "同意", addButton: "记录", save: "保存", placeholders: ["姓名:", "日期:", "时间:", "原因:"], deathMsg: (n,y,t,r) => `${n}死亡。<br>${y} (${t})<br>原因: ${r}`, deleteMsg: (n) => `${n}的名字消失了。`, listLabels: ["姓名:", "日期:", "原因:"], edit: "修改", del: "删除", rules: ["1. 名字写在上面的人就会死。", "2. 必须知道对方的长相。", "3. 40秒内可以写下死因。", "4. 否则将死于心脏麻痹。", "5. 理解规则后请点击同意。"] }
+    ru: { agree: "Да", addButton: "Запись", save: "ОК", placeholders: ["Имя:", "Дата:", "Время:", "Причина:"], deathMsg: (n,y,t,r) => `${n} мертв.<br>${y} (${t})<br>Причина: ${r}`, deleteMsg: (n) => `Имя ${n} стер토.`, listLabels: ["Имя:", "Дата:", "Причина:"], edit: "Изм", del: "Удл", rules: ["1. Человек, чье имя здесь, умрет.", "2. Нужно знать лицо жертвы.", "3. Причина смерти за 40 сек.", "4. Иначе - сердечный приступ.", "5. Нажмите Да, если поняли."] },
+    cn: { agree: "同意", addButton: "记录", save: "保存", placeholders: ["姓名:", "日期:", "时间:", "原因:"], deathMsg: (n,y,t,r) => `${n}死亡。<br>${y} (${t})<br>原因: ${r}`, deleteMsg: (n) => `${n}的名字消失了。`, listLabels: ["姓名:", "日期:", "原因:"], edit: "修改", del: "删除", rules: ["1. 名字写在上面的人就会死。", "2. 必须知道对方的长상。", "3. 40秒内可以写下死因。", "4. 否则将死于心脏麻痹。", "5. 理解规则后请点击同意。"] }
 };
 
 let currentLang = localStorage.getItem("dnLang") || "ko";
