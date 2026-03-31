@@ -4,136 +4,56 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Death Note</title>
-<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=East+Sea+Dokdo&display=swap" rel="stylesheet">
 
 <style>
-body {
-    margin: 0;
-    font-family: "궁서", serif;
-    background: radial-gradient(circle, #111 0%, #000 100%);
-    color: #ff1a1a;
-    text-align: center;
-    overflow-x: hidden;
-    display: flex;
-    justify-content: center;
-}
+body { margin: 0; font-family: 'East Sea Dokdo', "궁서", serif; background: radial-gradient(circle, #111 0%, #000 100%); color: #ff1a1a; text-align: center; overflow-x: hidden; display: flex; justify-content: center; }
+#mainWrapper { width: 100%; max-width: 1200px; transition: width 0.5s ease; padding: 20px; }
 
-#mainWrapper {
-    width: 100%;
-    max-width: 1200px;
-    transition: width 0.5s ease;
-    padding: 20px;
-}
+/* 룰 화면 */
+#rulesOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: flex; }
+.curtain { width: 50%; height: 100%; background: black; transition: transform 1s ease-in-out; }
+.rules-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; width: 90%; max-width: 600px; }
+#rulesMainTitle { font-family: 'Creepster'; font-size: 4rem; margin: 0 0 20px 0; text-shadow: 0 0 15px red; }
+.select-group { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 8px; }
+select, .btn-style { background: black; color: red; border: 1px solid red; padding: 8px 12px; font-family: 'East Sea Dokdo'; cursor: pointer; font-size: 18px; }
+#rulesContent { height: 250px; overflow-y: auto; text-align: left; line-height: 1.5em; border: 2px solid #ff1a1a; padding: 25px; background: rgba(0,0,0,0.9); font-size: 24px; scrollbar-width: thin; scrollbar-color: red black; }
 
-/* 룰 화면 디자인 */
-#rulesOverlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 9999;
-    display: flex;
-}
-.curtain {
-    width: 50%; height: 100%;
-    background: black;
-    transition: transform 1s ease-in-out;
-}
-
-.rules-inner {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10000;
-    width: 90%;
-    max-width: 600px;
-}
-
-#rulesMainTitle {
-    font-family: 'Creepster', "궁서";
-    font-size: 4rem;
-    margin: 0 0 20px 0;
-    text-shadow: 0 0 15px red;
-}
-
-.select-group { 
-    display: flex; 
-    justify-content: flex-end; 
-    gap: 10px; 
-    margin-bottom: 8px;
-}
-select, .btn-style {
-    background: black; color: red; border: 1px solid red;
-    padding: 8px 12px; font-family: 'Creepster', "궁서";
-    cursor: pointer; font-size: 14px;
-}
-
-/* 룰 스크롤 박스 - 빨간 테두리 적용 */
-#rulesContent {
-    height: 250px;
-    overflow-y: auto;
-    text-align: left;
-    line-height: 1.8em;
-    border: 2px solid #ff1a1a; /* 빨간색 테두리 */
-    padding: 25px;
-    background: rgba(0,0,0,0.9);
-    font-size: 15px;
-    scrollbar-width: thin;
-    scrollbar-color: red black;
-}
-
-/* 메인 화면 제목 및 밑줄 */
+/* 메인 제목 */
 .title-section { width: 100%; margin-bottom: 80px; position: relative; }
-.title-section h1 { font-size: 4.5rem; margin: 0; font-family: 'Creepster'; }
-.title-underline {
-    width: 100vw; height: 5px; background-color: #ff1a1a;
-    position: absolute; left: 50%; transform: translateX(-50%);
-    margin-top: 20px;
-}
+.title-section h1 { font-size: 5rem; margin: 0; font-family: 'Creepster'; letter-spacing: 5px; }
+.title-underline { width: 100vw; height: 5px; background-color: #ff1a1a; position: absolute; left: 50%; transform: translateX(-50%); margin-top: 20px; }
 
-/* 입력 영역 - 박스 크기 통일 */
+/* 입력창 및 버튼 */
 .container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 100px; }
-input, #recordBtn { 
-    width: 90%; 
-    max-width: 400px; 
-    padding: 12px; 
-    background: black; 
-    border: 1px solid red; 
-    color: red; 
-    font-size: 16px; 
-    outline: none;
-    box-sizing: border-box;
-}
-#recordBtn {
-    font-family: 'Creepster', "궁서";
-    cursor: pointer;
-    font-size: 18px;
-}
+input, #recordBtn { width: 90%; max-width: 400px; padding: 10px; background: black; border: 1px solid red; color: red; font-size: 24px; font-family: 'East Sea Dokdo'; outline: none; box-sizing: border-box; }
+input::placeholder { color: rgba(255, 0, 0, 0.5); }
+#recordBtn { font-family: 'Creepster'; cursor: pointer; font-size: 22px; transition: 0.3s; }
+#recordBtn:hover { background: #ff1a1a; color: black; }
 
-/* 리스트 스타일 */
-#listContainer {
-    height: 350px; overflow-y: auto; width: 100%; max-width: 700px;
-    margin: 30px auto; border: 2px solid #ff1a1a;
-    background: rgba(10, 0, 0, 0.8);
-    text-align: left;
-}
+/* 리스트 디자인 */
+#listContainer { height: 350px; overflow-y: auto; width: 100%; max-width: 700px; margin: 30px auto; border: 2px solid #ff1a1a; background: rgba(10, 0, 0, 0.8); text-align: left; }
 ol { list-style: none; padding: 0; margin: 0; }
-li { 
-    padding: 20px; border-bottom: 1px solid #444; 
-    line-height: 1.6;
-}
-.future-tag { 
-    display: block;
-    color: #888; font-size: 13px; font-style: italic; margin-top: 5px;
+li { padding: 15px 20px; border-bottom: 1px solid #444; font-size: 24px; line-height: 1.2; }
+.future-tag { display: block; color: #888; font-size: 16px; font-style: italic; margin-top: 5px; font-family: sans-serif; }
+
+/* 🌟 사망 메시지 - 한 글자씩 타이핑 효과 및 반짝임 🌟 */
+#msgContainer { margin: 30px auto; min-height: 120px; }
+.death-message { 
+    font-size: 32px; font-weight: bold; color: #ff0000;
+    text-shadow: 0 0 15px rgba(255,0,0,0.8);
+    line-height: 1.3;
+    display: inline-block;
 }
 
-/* 사망 메시지 반짝임 효과 */
-#msgContainer { margin: 30px auto; min-height: 80px; }
-.death-message { 
-    font-size: 20px; font-weight: bold; color: #ff0000;
-    text-shadow: 0 0 15px rgba(255,0,0,0.8);
+/* 반짝이는 효과 애니메이션 정의 */
+.flashing {
     animation: flashFade 1.2s infinite alternate;
 }
-@keyframes flashFade { from { opacity: 1; } to { opacity: 0.3; } }
+@keyframes flashFade {
+    0% { opacity: 1; text-shadow: 0 0 15px rgba(255,0,0,0.8); }
+    100% { opacity: 0.3; text-shadow: 0 0 5px rgba(255,0,0,0.3); }
+}
 </style>
 </head>
 <body>
@@ -156,10 +76,8 @@ li {
                 <option value="mobile">Mobile</option>
             </select>
         </div>
-        <div id="rulesContent">
-            <div id="rulesList"></div>
-        </div>
-        <button id="agreeBtn" class="btn-style" style="margin-top: 30px; padding: 12px 100px; font-size: 18px;">AGREE</button>
+        <div id="rulesContent"><div id="rulesList"></div></div>
+        <button id="agreeBtn" class="btn-style" style="margin-top: 30px; padding: 10px 100px; font-size: 24px;">AGREE</button>
     </div>
 </div>
 
@@ -168,45 +86,34 @@ li {
         <div class="title-section">
             <h1>Death Note</h1>
             <div class="title-underline"></div>
-            <button id="viewRulesBtn" class="btn-style" style="position:absolute; right: 20px; bottom: -70px; padding: 10px 25px;">RULES</button>
+            <button id="viewRulesBtn" class="btn-style" style="position:absolute; right: 20px; bottom: -85px; padding: 10px 25px;">RULES</button>
         </div>
-        
         <div class="container">
-            <input type="text" id="name">
-            <input type="text" id="year">
-            <input type="text" id="time">
-            <input type="text" id="reason">
-            <button id="recordBtn">기록하기</button>
+            <input type="text" id="name" placeholder="누구(이름):">
+            <input type="text" id="year" placeholder="언제(날짜):">
+            <input type="text" id="time" placeholder="몇시(시간):">
+            <input type="text" id="reason" placeholder="왜(사인):">
+            <button id="recordBtn">RECORD</button>
         </div>
-
         <div id="msgContainer"></div>
-
-        <h2 style="font-family:'Creepster'; margin-top: 20px;">DEATH LIST</h2>
-        <div id="listContainer">
-            <ol id="list"></ol>
-        </div>
+        <h2 style="font-family:'Creepster'; margin-top: 20px; font-size: 2.5rem;">DEATH LIST</h2>
+        <div id="listContainer"><ol id="list"></ol></div>
     </div>
 </div>
 
 <script>
-const rulesText = {
-    ko: ["1. 이 노트에 이름이 적힌 인간은 죽는다.", "2. 얼굴을 모르면 효과가 없다.", "3. 40초 내에 사인을 적으면 그대로 죽는다.", "4. 사인을 적지 않으면 심장마비로 죽는다.", "5. 모든 규칙을 이해했다면 동의를 누르십시오."],
-    en: ["1. The human whose name is written shall die.", "2. Face is required for effect.", "3. Cause of death must be written in 40s.", "4. Default cause is heart attack.", "5. Click AGREE to proceed."],
-    jp: ["1. 名前を書かれた人間は死ぬ。", "2. 顔を知らないと効果はない。", "3. 40秒以内に死因を書くこと。", "4. 書かなければ心臓麻痺となる。", "5. 同意する場合はボタンを押して。"],
-    ru: ["1. Человек, чье имя записано здесь, умрет.", "2. Тетрадь не подействует без лица.", "3. Причина смерти пишется за 40 сек.", "4. Без причины - сердечный приступ.", "5. Нажмите AGREE."],
-    cn: ["1. 名字被写在笔记上的人都会死。", "2. 不知道面孔将不会生效。", "3. 40秒内编写死因。", "4. 没写死因将死于心脏麻痹。", "5. 请点击同意。"]
-};
-
+const rulesText = { ko: ["1. 이 노트에 이름이 적힌 인간은 죽는다.", "2. 얼굴을 모르면 효과가 없다.", "3. 40초 내에 사인을 적으면 그대로 죽는다.", "4. 사인을 적지 않으면 심장마비로 죽는다.", "5. 모든 규칙을 이해했다면 동의를 누르십시오."], en: ["1. The human whose name is written shall die.", "2. Face is required for effect.", "3. Cause of death must be written in 40s.", "4. Default cause is heart attack.", "5. Click AGREE to proceed."], jp: ["1. 名前を書かれた人間は死ぬ。", "2. 顔を知らないと効果はない。", "3. 40秒以内に死因を書くこと。", "4. 書かなければ心臓麻痺となる。", "5. 同意する場合はボタンを押して。"], ru: ["1. Человек, чье имя записано здесь, умрет.", "2. Тетрадь не подействует без лица.", "3. Причина смерти пишется за 40 сек.", "4. Без причины - сердечный приступ.", "5. Нажмите AGREE."], cn: ["1. 名字被写在笔记上的人都会死。", "2. 不知道面孔将不会生效。", "3. 40秒内编写死因。", "4. 没写死因将死于心脏麻痹。", "5. 请点击同意。"] };
 const translations = {
-    ko: { agree: "동의", addButton: "기록하기", placeholders: ["이름:", "날짜:", "시간:", "사유:"], future: "(미래의 사망)" },
-    en: { agree: "AGREE", addButton: "Record", placeholders: ["Name:", "Date:", "Time:", "Reason:"], future: "(Future Death)" },
-    jp: { agree: "同意", addButton: "記録", placeholders: ["名前:", "日付:", "時間:", "理由:"], future: "(未来の死)" },
-    ru: { agree: "Согласен", addButton: "Записать", placeholders: ["Имя:", "Дата:", "Время:", "Причина:"], future: "(Будущая смерть)" },
-    cn: { agree: "同意", addButton: "添加", placeholders: ["姓名:", "日期:", "时间:", "原因:"], future: "(未来的死亡)" }
+    ko: { agree: "동의", addButton: "기록하기", placeholders: ["누구(이름):", "언제(날짜):", "몇시(시간):", "왜(사인):"], future: "(미래의 사망)", deathMsg: (n,y,t,r) => `${n}은(는) 사망했다.<br>${y} (${t})<br>사유: ${r}`, listLabels: ["이름:", "일시:", "사유:"] },
+    en: { agree: "AGREE", addButton: "RECORD", placeholders: ["Who:", "When:", "Time:", "Why:"], future: "(Future Death)", deathMsg: (n,y,t,r) => `${n} has died.<br>${y} (${t})<br>Reason: ${r}`, listLabels: ["Name:", "Date:", "Reason:"] },
+    jp: { agree: "同意", addButton: "記録", placeholders: ["名前:", "日付:", "時間:", "理由:"], future: "(未来の死)", deathMsg: (n,y,t,r) => `${n}は死亡した。<br>${y} (${t})<br>理由: ${r}`, listLabels: ["名前:", "日時:", "理由:"] },
+    ru: { agree: "Согласен", addButton: "Записать", placeholders: ["Имя:", "Дата:", "Время:", "Причина:"], future: "(Будущая смерть)", deathMsg: (n,y,t,r) => `${n} умер.<br>${y} (${t})<br>Причина: ${r}`, listLabels: ["Имя:", "Дата:", "Причина:"] },
+    cn: { agree: "同意", addButton: "添加", placeholders: ["姓名:", "日期:", "时间:", "原因:"], future: "(未来的死亡)", deathMsg: (n,y,t,r) => `${n}死亡了。<br>${y} (${t})<br>原因: ${r}`, listLabels: ["姓名:", "日期:", "原因:"] }
 };
 
 let currentLang = localStorage.getItem("dnLang") || "ko";
 let deathList = JSON.parse(localStorage.getItem("dnList")) || [];
+let typingInterval; // 타이핑 타이머 저장용
 
 function updateUI(){
     const t = translations[currentLang];
@@ -226,66 +133,64 @@ function renderList() {
     listEl.innerHTML = "";
     deathList.forEach(item => {
         const li = document.createElement("li");
-        li.innerHTML = `
-            <div><b>이름:</b> ${item.name} | <b>일시:</b> ${item.year} (${item.time}) | <b>사유:</b> ${item.reason}</div>
-            <span class="future-tag">${t.future}</span>
-        `;
+        li.innerHTML = `<div><b>${t.listLabels[0]}</b> ${item.name} | <b>${t.listLabels[1]}</b> ${item.year} (${item.time}) | <b>${t.listLabels[2]}</b> ${item.reason}</div><span class="future-tag">${t.future}</span>`;
         listEl.appendChild(li);
     });
 }
 
-document.getElementById("deviceSelect").addEventListener("change", (e) => {
-    document.getElementById("mainWrapper").style.width = (e.target.value === "mobile") ? "375px" : "100%";
-});
-
-document.getElementById("langSelect").addEventListener("change", (e)=>{
-    currentLang = e.target.value;
-    localStorage.setItem("dnLang", currentLang);
-    updateUI();
-});
-
-document.getElementById("agreeBtn").addEventListener("click", ()=>{
-    document.getElementById("rulesWrapper").style.opacity = "0";
-    setTimeout(() => {
-        document.getElementById("leftCurtain").style.transform = "translateX(-100%)";
-        document.getElementById("rightCurtain").style.transform = "translateX(100%)";
-        setTimeout(() => {
-            document.getElementById("rulesOverlay").style.display = "none";
-            document.getElementById("deathNote").style.display = "block";
-        }, 800);
-    }, 300);
-});
-
-document.getElementById("viewRulesBtn").addEventListener("click", () => {
-    document.getElementById("rulesOverlay").style.display = "flex";
-    setTimeout(() => {
-        document.getElementById("leftCurtain").style.transform = "translateX(0)";
-        document.getElementById("rightCurtain").style.transform = "translateX(0)";
-        setTimeout(() => { document.getElementById("rulesWrapper").style.opacity = "1"; }, 800);
-    }, 10);
-});
+document.getElementById("deviceSelect").addEventListener("change", (e) => { document.getElementById("mainWrapper").style.width = (e.target.value === "mobile") ? "375px" : "100%"; });
+document.getElementById("langSelect").addEventListener("change", (e)=>{ currentLang = e.target.value; localStorage.setItem("dnLang", currentLang); updateUI(); });
+document.getElementById("agreeBtn").addEventListener("click", ()=>{ document.getElementById("rulesWrapper").style.opacity = "0"; setTimeout(() => { document.getElementById("leftCurtain").style.transform = "translateX(-100%)"; document.getElementById("rightCurtain").style.transform = "translateX(100%)"; setTimeout(() => { document.getElementById("rulesOverlay").style.display = "none"; document.getElementById("deathNote").style.display = "block"; }, 800); }, 300); });
+document.getElementById("viewRulesBtn").addEventListener("click", () => { document.getElementById("rulesOverlay").style.display = "flex"; setTimeout(() => { document.getElementById("leftCurtain").style.transform = "translateX(0)"; document.getElementById("rightCurtain").style.transform = "translateX(0)"; setTimeout(() => { document.getElementById("rulesWrapper").style.opacity = "1"; }, 800); }, 10); });
 
 document.getElementById("recordBtn").addEventListener("click", ()=>{
     const n=document.getElementById("name").value.trim();
     const y=document.getElementById("year").value.trim();
     const t_val=document.getElementById("time").value.trim();
     const r=document.getElementById("reason").value.trim();
-
-    if(!n || !y || !t_val || !r){ alert("모두 입력하십시오."); return; }
+    if(!n || !y || !t_val || !r){ return; }
+    
+    // 이전 타이핑 효과가 진행 중이면 즉시 중단 및 초기화
+    clearInterval(typingInterval); 
+    const msgContainer = document.getElementById("msgContainer");
+    msgContainer.innerHTML = "";
 
     const newItem = { name: n, year: y, time: t_val, reason: r };
     deathList.unshift(newItem);
     localStorage.setItem("dnList", JSON.stringify(deathList));
     renderList();
 
-    const msgContainer = document.getElementById("msgContainer");
-    msgContainer.innerHTML = `<div class="death-message">
-        ${n}은(는) 사망했다.<br>
-        ${y} (${t_val})<br>
-        사유: ${r}
-    </div>`;
+    const t = translations[currentLang];
+    const fullText = t.deathMsg(n, y, t_val, r); // 전체 메시지 가져오기
     
-    setTimeout(() => { msgContainer.innerHTML = ""; }, 5000);
+    // 사망 메시지를 담을 요소 생성 (flashing 클래스는 아직 넣지 않음)
+    const msgDiv = document.createElement("div");
+    msgDiv.className = "death-message";
+    msgContainer.appendChild(msgDiv);
+    
+    // 🌟 한 글자씩 타이핑 효과 로직 🌟
+    let index = 0;
+    typingInterval = setInterval(() => {
+        // <br> 태그를 만나면 한꺼번에 처리
+        if (fullText.substring(index, index + 4) === "<br>") {
+            msgDiv.innerHTML += "<br>";
+            index += 4;
+        } else {
+            // 한 글자씩 출력
+            msgDiv.innerHTML += fullText[index];
+            index++;
+        }
+        
+        // 메시지 완성이 되면
+        if (index >= fullText.length) {
+            clearInterval(typingInterval); // 타이머 중지
+            msgDiv.classList.add("flashing"); // 🌟 완성과 동시에 반짝이는 효과 추가 🌟
+            
+            // 5초 뒤에 사라지는 기존 로직 유지
+            setTimeout(() => { msgContainer.innerHTML = ""; }, 5000);
+        }
+    }, 100); // 100ms(0.1초) 간격으로 출력 (속도 조절 가능)
+
     ["name","year","time","reason"].forEach(id => document.getElementById(id).value="");
 });
 
